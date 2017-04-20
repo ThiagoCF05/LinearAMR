@@ -11,10 +11,10 @@ class LSTMTraining(object):
     def __init__(self, train_X, train_y, dev_X, dev_y, voc):
         self.cwin = 25
 
+        self.voc = p.load(open(voc))
         self.train_X, self.train_y = self.load_set(train_X, train_y)
         self.dev_X, self.dev_y = self.load_set(dev_X, dev_y)
 
-        self.voc = p.load(open(voc))
         self.max_features = len(self.voc)
 
     def contextwin(self, l, win):
