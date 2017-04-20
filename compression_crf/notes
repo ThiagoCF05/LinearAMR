@@ -1,0 +1,26 @@
+python preprocessing.py
+python chunking.py < data_delex/train.feat > data_delex/train.crfsuite.txt
+python chunking.py < data_delex/dev.feat > data_delex/dev.crfsuite.txt
+python chunking.py < data_delex/test.feat > data_delex/test.crfsuite.txt
+
+Training:
+crfsuite learn -m compressor.model -e2 train.crfsuite.txt test.crfsuite.txt
+
+Tagging:
+crfsuite tag -m compressor.model dev.crfsuite.txt > dev.out
+crfsuite tag -m compressor.model test.crfsuite.txt > test.out
+
+***** Iteration #676 *****
+Loss: 165800.465792
+Feature norm: 176.672644
+Error norm: 184.321372
+Active features: 1835765
+Line search trials: 2
+Line search step: 0.391069
+Seconds required for this iteration: 2.666
+Performance by label (#match, #model, #ref) (precision, recall, F1):
+    +: (20470, 22613, 22892) (0.9052, 0.8942, 0.8997)
+    -: (21234, 23656, 23377) (0.8976, 0.9083, 0.9029)
+Macro-average precision, recall, F1: (0.901424, 0.901264, 0.901311)
+Item accuracy: 41704 / 46269 (0.9013)
+Instance accuracy: 241 / 1371 (0.1758)

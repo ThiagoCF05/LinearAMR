@@ -1,0 +1,70 @@
+1. Align training set with Little Prince, LDC2016E25 and LDC2016E33 (checked)
+2. Linearize training set based on the alignment in 1
+3. Clean the linearization according to nima strategy
+4. Escape specal characters
+#############################################################################
+Run Nima generator
+./build.sh /home/tcastrof/workspace/mosesdecoder/bin /roaming/tcastrof/gigaword/gigaword.bin
+
+./run.sh < /home/tcastrof/amr/AMR.txt > out
+#############################################################################
+Moses training command
+perl /home/tcastrof/workspace/mosesdecoder/scripts/training/train-model.perl \
+    -root-dir . \
+    --corpus train_esc \
+    -mgiza \
+    --max-phrase-length 9 \
+    -external-bin-dir /home/tcastrof/workspace/mgiza \
+    --f de --e en \
+    --first-step 4 \
+    --parallel \
+    --distortion-limit -1 \
+    --lm 0:5:/roaming/tcastrof/gigaword/gigaword.bin \
+    -reordering hier-mslr-bidirectional-fe
+#############################################################################
+Moses tunning command
+perl /home/tcastrof/workspace/mosesdecoder/scripts/training/mert-moses.pl \
+	dev.de \
+	dev.en \
+	/home/tcastrof/workspace/mosesdecoder/bin/moses \
+	model/moses.ini \
+	--nbest=1000 \
+	--working-dir=/home/tcastrof/workspace/mosesdecoder/mert \
+	--decoder-flags '-threads 16 -v 0'
+
+perl /home/tcastrof/workspace/mosesdecoder/scripts/training/mert-moses.pl \
+	dev_esc.de \
+	dev_esc.en \
+    /home/tcastrof/workspace/mosesdecoder/bin/moses \
+    model/moses.ini \
+    --mertdir /home/tcastrof/workspace/mosesdecoder/mert \
+    --rootdir /home/tcastrof/workspace/mosesdecoder/scripts \
+    --batch-mira --return-best-dev \
+    --batch-mira-args '-J 60' --decoder-flags '-threads 16 -v 0'
+#############################################################################
+Operation Sequence Model (reordering)
+/home/tcastrof/workspace/mosesdecoder/scripts/OSM/OSM-Train.perl \
+  	--corpus-f train_esc.de \
+  	--corpus-e train_esc.en \
+  	--alignment model/aligned.grow-diag-final \
+  	--order 5 \
+  	--out-dir model/OSM \
+  	--moses-src-dir //home/tcastrof/workspace/mosesdecoder \
+  	--lmplz /home/tcastrof/workspace/kenlm/build/bin/lmplz \
+  	--factor 0-0 \
+  	--input-extension de \
+  	--output-extension en 
+#############################################################################
+Kenlm training language model command
+/home/tcastrof/workspace/kenlm/build/bin/lmplz -o 5 -T /tmp <cna_eng.txt >cna_eng.arpa
+/home/tcastrof/workspace/kenlm/build/bin/build_binary cna_eng.arpa cna_eng.bin
+#############################################################################
+Clean special characters
+perl /home/tcastrof/workspace/mosesdecoder/scripts/tokenizer/escape-special-chars.perl <test.de >test_escaped.de
+#############################################################################
+Moses decode command
+moses -f model/moses.ini -s 1000 < ../test/test.de > out
+#############################################################################
+https://github.com/jhclark/multeval
+
+./multeval eval --ref /path/to/reference.txt --hyps-baseline /path/to/baseline.txt --hyps-sys /path/to/hypothesis.txt --meteor.language en
