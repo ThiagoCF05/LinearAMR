@@ -51,8 +51,11 @@ class LSTMPrepare(object):
 
         print 'PROCESSING...'
         self.train_X, self.train_y = self.process(self.train_amrs)
+        print 'TRAIN MAX LEN: ', max(map(lambda x: len(x), self.train_X))
         self.dev_X, self.dev_y = self.process(self.dev_amrs)
+        print 'DEV MAX LEN: ', max(map(lambda x: len(x), self.dev_X))
         self.test_X, self.test_y = self.process(self.test_amrs)
+        print 'TEST MAX LEN: ', max(map(lambda x: len(x), self.test_X))
 
         print 'WRITING...'
         self.save_voc()

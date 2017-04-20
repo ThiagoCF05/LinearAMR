@@ -1,14 +1,18 @@
 
+from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.layers import Embedding
 from keras.layers import LSTM
 
 import cPickle as p
+import numpy as np
 
 class LSTMTraining(object):
     def __init__(self, train_X, train_y, dev_X, dev_y, voc):
         self.load_files(train_X, train_y, dev_X, dev_y)
+
+        self.maxlen = 300
 
         self.voc = p.load(open(voc))
         self.max_features = len(self.voc)
@@ -21,6 +25,7 @@ class LSTMTraining(object):
 
         for i, X in enumerate(self.train_X):
             self.train_X[i] = map(lambda x: int(x), self.train_X[i])
+        self.train_X = sequence.pad_sequences(np.array(self.train_X), maxlen=self.maxlen)
         f.close()
 
         f = open(ftrain_y)
@@ -29,6 +34,7 @@ class LSTMTraining(object):
 
         for i, y in enumerate(self.train_y):
             self.train_y[i] = map(lambda x: int(x), self.train_y[i])
+        self.train_y = np.array(self.train_y)
         f.close()
 
         # Dev set
@@ -38,6 +44,7 @@ class LSTMTraining(object):
 
         for i, X in enumerate(self.dev_X):
             self.dev_X[i] = map(lambda x: int(x), self.dev_X[i])
+        self.dev_X = sequence.pad_sequences(np.array(self.dev_X), maxlen=self.maxlen)
         f.close()
 
         f = open(fdev_y)
@@ -46,6 +53,7 @@ class LSTMTraining(object):
 
         for i, y in enumerate(self.dev_y):
             self.dev_y[i] = map(lambda x: int(x), self.dev_y[i])
+        self.dev_y = np.array(self.dev_y)
         f.close()
 
     def save(self):
