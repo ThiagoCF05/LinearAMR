@@ -82,3 +82,4 @@ if __name__ == '__main__':
     VOC_FILE = 'data_lex/voc.cPickle'
 
     lstm = LSTMTraining(train_X=TRAIN_X_FILE, train_y=TRAIN_Y_FILE, dev_X=DEV_X_FILE, dev_y=DEV_Y_FILE, voc=VOC_FILE)
+    lstm.train()
