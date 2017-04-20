@@ -9,7 +9,7 @@ import numpy as np
 
 class LSTMTraining(object):
     def __init__(self, train_X, train_y, dev_X, dev_y, voc):
-        self.cwin = 51
+        self.cwin = 25
 
         self.train_X, self.train_y = self.load_set(train_X, train_y)
         self.dev_X, self.dev_y = self.load_set(dev_X, dev_y)
@@ -72,9 +72,9 @@ class LSTMTraining(object):
                       optimizer='rmsprop',
                       metrics=['accuracy'])
 
-        model.fit(self.train_X, self.train_y, batch_size=16, epochs=5)
+        model.fit(self.train_X, self.train_y, batch_size=64, epochs=5)
 
-        score = model.evaluate(self.dev_X, self.dev_y, batch_size=16)
+        score = model.evaluate(self.dev_X, self.dev_y, batch_size=64)
         print 'Dev score: ', score
 
         model.save('data_lex/model.h5')

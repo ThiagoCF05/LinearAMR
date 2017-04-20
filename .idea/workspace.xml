@@ -16,25 +16,13 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="training.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="training.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/compression_lstm/training.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="66" column="31" lean-forward="false" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="31" />
+            <state relative-caret-position="-383">
+              <caret line="11" column="22" lean-forward="false" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
               <folding>
                 <element signature="e#1#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="training_encoder.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/compression_lstm/training_encoder.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-              <folding>
-                <element signature="e#1#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -105,8 +93,8 @@
         <option value="$PROJECT_DIR$/compression_lstm/data_lex/train_X.feat" />
         <option value="$PROJECT_DIR$/linearizer/sort_classifier.py" />
         <option value="$PROJECT_DIR$/compression_lstm/preprocessing.py" />
-        <option value="$PROJECT_DIR$/compression_lstm/training.py" />
         <option value="$PROJECT_DIR$/compression_lstm/training_encoder.py" />
+        <option value="$PROJECT_DIR$/compression_lstm/training.py" />
       </list>
     </option>
   </component>
@@ -1215,16 +1203,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/compression_lstm/training.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="66" column="31" lean-forward="false" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="31" />
-          <folding>
-            <element signature="e#1#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/compression_lstm/data_lex/test_X.feat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1243,10 +1221,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/compression_lstm/training_encoder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        <state relative-caret-position="547">
+          <caret line="57" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="78" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compression_lstm/training.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-383">
+          <caret line="11" column="22" lean-forward="false" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
           <folding>
-            <element signature="e#1#41#0" expanded="true" />
+            <element signature="e#1#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
