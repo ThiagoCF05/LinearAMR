@@ -31,7 +31,7 @@ class LSTMTraining(object):
         assert win >= 1
         l = list(l)
 
-        lpadded = win // 2 * [-1] + l + win // 2 * [-1]
+        lpadded = win // 2 * [self.voc['pad']] + l + win // 2 * [self.voc['pad']]
         out = [lpadded[i:(i + win)] for i in range(len(l))]
 
         assert len(out) == len(l)

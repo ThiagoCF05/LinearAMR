@@ -149,7 +149,7 @@ class LSTMPrepare(object):
         return X, y
 
     def save_voc(self):
-        p.dump(self.id2word, open(self.wvoc, 'w'))
+        p.dump(self.word2id, open(self.wvoc, 'w'))
 
     def save(self, X, y, Xname, yname):
         Xf = open(Xname, 'w')
