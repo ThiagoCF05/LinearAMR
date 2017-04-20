@@ -10,9 +10,8 @@ import numpy as np
 
 class LSTMTraining(object):
     def __init__(self, train_X, train_y, dev_X, dev_y, voc):
-        self.load_files(train_X, train_y, dev_X, dev_y)
-
         self.maxlen = 300
+        self.load_files(train_X, train_y, dev_X, dev_y)
 
         self.voc = p.load(open(voc))
         self.max_features = len(self.voc)
