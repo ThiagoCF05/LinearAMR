@@ -20,40 +20,39 @@ class LSTMTraining(object):
         # Training set
         f = open(ftrain_X)
         self.train_X = f.read().split('\n')
-        self.train_X = map(lambda x: np.array(x.split()), self.train_X)
+        self.train_X = map(lambda x: x.split(), self.train_X)
 
         for i, X in enumerate(self.train_X):
             self.train_X[i] = map(lambda x: int(x), self.train_X[i])
-        self.train_X = sequence.pad_sequences(np.array(self.train_X), maxlen=self.maxlen)
+        self.train_X = sequence.pad_sequences(np.array(self.train_X, dtype=object), maxlen=self.maxlen)
         f.close()
-        print self.train_X.shape
 
         f = open(ftrain_y)
         self.train_y = f.read().split('\n')
-        self.train_y = map(lambda x: np.array(x.split()), self.train_y)
+        self.train_y = map(lambda x: x.split(), self.train_y)
 
         for i, y in enumerate(self.train_y):
             self.train_y[i] = map(lambda x: int(x), self.train_y[i])
-        self.train_y = np.array(self.train_y)
+        self.train_y = np.array(self.train_y, dtype=object)
         f.close()
 
         # Dev set
         f = open(fdev_X)
         self.dev_X = f.read().split('\n')
-        self.dev_X = map(lambda x: np.array(x.split()), self.dev_X)
+        self.dev_X = map(lambda x: x.split(), self.dev_X)
 
         for i, X in enumerate(self.dev_X):
             self.dev_X[i] = map(lambda x: int(x), self.dev_X[i])
-        self.dev_X = sequence.pad_sequences(np.array(self.dev_X), maxlen=self.maxlen)
+        self.dev_X = sequence.pad_sequences(np.array(self.dev_X, dtype=object), maxlen=self.maxlen)
         f.close()
 
         f = open(fdev_y)
         self.dev_y = f.read().split('\n')
-        self.dev_y = map(lambda x: np.array(x.split()), self.dev_y)
+        self.dev_y = map(lambda x: x.split(), self.dev_y)
 
         for i, y in enumerate(self.dev_y):
             self.dev_y[i] = map(lambda x: int(x), self.dev_y[i])
-        self.dev_y = np.array(self.dev_y)
+        self.dev_y = np.array(self.dev_y, dtype=object)
         f.close()
 
     def save(self):
@@ -69,6 +68,9 @@ class LSTMTraining(object):
         model.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
+
+        print self.train_X[0]
+        print self.train_y[0]
 
         model.fit(self.train_X, self.train_y, batch_size=16, epochs=40)
 
