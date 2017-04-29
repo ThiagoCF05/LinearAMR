@@ -25,7 +25,7 @@ if __name__ == '__main__':
             print i
             try:
                 ter = pyter.ter(hyps[i], refs[i])
-                if ter <1:
+                if ter <= 1:
                     result.append((len(hyps[i]), ter))
             except:
                 print 'Error'

@@ -9,7 +9,7 @@ import pyter
 
 from sklearn import linear_model
 
-KENLM_PATH = '/home/tcastrof/gigaword/gigaword.bin'
+KENLM_PATH = '/roaming/tcastrof/gigaword/gigaword.bin'
 
 ORIGINAL_DIR = '../data/final_evaluation/results/pbmt/-Delex+Compress+Preorder/test.en'
 mDelex_compress_preorder = '../data/final_evaluation/results/pbmt/-Delex+Compress+Preorder/test.out'
@@ -26,7 +26,7 @@ def write(plot, fname):
         f.write(str(elem[0]))
         f.write(' ')
         f.write(str(elem[1]))
-        f.write('\\')
+        f.write('\\\\')
     f.close()
 
 if __name__ == '__main__':
@@ -41,9 +41,9 @@ if __name__ == '__main__':
             print i
             try:
                 ter = pyter.ter(hyps[i], refs[i])
-                if ter <1:
-                    score = round(model.score(hyps[i]), 1)
-                    result.append((score, ter))
+                if ter <= 1:
+                    score = round(model.score(' '.join(hyps[i])), 1)
+                    result.append((int(score), ter))
             except:
                 print 'Error'
 
