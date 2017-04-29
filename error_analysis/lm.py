@@ -1,9 +1,11 @@
 __author__ = 'thiagocastroferreira'
 
 import kenlm
-import pyter
 import operator
 import numpy as np
+import sys
+sys.path.append('/home/tcastrof/workspace/pyter')
+import pyter
 
 from sklearn import linear_model
 
