@@ -1,26 +1,29 @@
 python preprocessing.py
-python chunking.py < data_delex/train.feat > data_delex/train.crfsuite.txt
-python chunking.py < data_delex/dev.feat > data_delex/dev.crfsuite.txt
-python chunking.py < data_delex/test.feat > data_delex/test.crfsuite.txt
+python chunking.py < data_lex/train.feat > data_lex/train.crfsuite.txt
+python chunking.py < data_lex/dev.feat > data_lex/dev.crfsuite.txt
+python chunking.py < data_lex/test.feat > data_lex/test.crfsuite.txt
 
 Training:
-crfsuite learn -m compressor.model -e2 train.crfsuite.txt test.crfsuite.txt
+crfsuite learn -m compressor.model -e2 train.crfsuite.txt dev.crfsuite.txt
 
 Tagging:
 crfsuite tag -m compressor.model dev.crfsuite.txt > dev.out
 crfsuite tag -m compressor.model test.crfsuite.txt > test.out
 
-***** Iteration #676 *****
-Loss: 165800.465792
-Feature norm: 176.672644
-Error norm: 184.321372
-Active features: 1835765
-Line search trials: 2
-Line search step: 0.391069
-Seconds required for this iteration: 2.666
+***** Iteration #670 *****
+Loss: 170845.152328
+Feature norm: 179.047115
+Error norm: 136.797680
+Active features: 1885066
+Line search trials: 1
+Line search step: 1.000000
+Seconds required for this iteration: 1.692
 Performance by label (#match, #model, #ref) (precision, recall, F1):
-    +: (20470, 22613, 22892) (0.9052, 0.8942, 0.8997)
-    -: (21234, 23656, 23377) (0.8976, 0.9083, 0.9029)
-Macro-average precision, recall, F1: (0.901424, 0.901264, 0.901311)
-Item accuracy: 41704 / 46269 (0.9013)
-Instance accuracy: 241 / 1371 (0.1758)
+    +: (20473, 22452, 22601) (0.9119, 0.9058, 0.9088)
+    -: (24826, 26954, 26805) (0.9211, 0.9262, 0.9236)
+Macro-average precision, recall, F1: (0.916454, 0.916008, 0.916222)
+Item accuracy: 45299 / 49406 (0.9169)
+Instance accuracy: 230 / 1368 (0.1681)
+
+LSTM
+Dev score:  [0.22688098292174536, 0.9128445937595584]

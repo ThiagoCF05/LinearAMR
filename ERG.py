@@ -2,7 +2,6 @@ __author__ = 'thiagocastroferreira'
 
 import copy
 import re
-import utils
 
 class AMREdge(object):
     def __init__(self, name, order_id, node_id, isRule=False, status='', tokens=[]):
@@ -52,40 +51,6 @@ class AMR(object):
 
             for edge in self.edges[node]:
                 edge.status = '+'
-
-    def compress(self, root, sub2word):
-        # filter subgraphs with the root given as a parameter which the related word is in the sentence
-        subgraphs = filter(lambda iter: iter[0][0] == self.nodes[root].name, sub2word.iteritems())
-
-        # subgraphs, lemma = [], ''
-        # for candidate in f:
-        #     for _lemma in filter(lambda x: x[1] == 'unlabeled', self.lemmas):
-        #         if _lemma[0] in candidate[1]:
-        #             subgraphs.append(candidate[0])
-        #             lemma = _lemma[0]
-        #             break
-
-        if len(subgraphs) > 0:
-            subgraphs = sorted(subgraphs, key=len)
-            subgraphs.reverse()
-
-            matched = True
-            filtered_subgraph = [self.nodes[root].name]
-            for sub in subgraphs:
-                matched = True
-                for edge in sub[1:]:
-                    f = filter(lambda match_edge: match_edge.name == edge[0] and self.nodes[match_edge.node_id].name == edge[1], self.edges[root])
-                    if len(f) > 0:
-                        filtered_subgraph.append(f[0])
-                    else:
-                        matched = False
-                        filtered_subgraph = [self.nodes[root].name]
-                        break
-                if matched:
-                    break
-
-            if matched:
-                pass
 
     def remove_senses(self):
         for node in self.nodes:
@@ -213,61 +178,6 @@ class AMR(object):
             real_values = self.delexicalize(edge.node_id, real_values)
         return real_values
 
-    def delexicalize_nameV2(self, root, real_values):
-        parent = self.nodes[root].parent
-        if parent['node'] == 'root':
-            return real_values
-        wiki = self.nodes[parent['node']].wiki
-        wiki_info = filter(lambda x: x['wiki'].lower() == wiki.lower(), utils.wiki_info)
-
-        if wiki != '-' and len(wiki_info) > 0:
-            wiki_info = wiki_info[0]
-
-            tags = []
-            if wiki_info['type'] == 'other':
-                return real_values
-            elif wiki_info['type'] == 'location':
-                tags = utils.location
-            else:
-                tags = utils.people
-
-            i = 0
-            new_name = tags[0].lower()
-            while len(filter(lambda x: x['tag'] == new_name, real_values)):
-                i = i + 1
-                new_name = tags[i].lower()
-            new_name = new_name.encode('utf-8')
-
-            real_value = []
-            for edge in self.edges[root]:
-                if ':op' in edge.name:
-                    name = self.nodes[edge.node_id].name
-                    real_value.append((edge.name, edge.node_id, name))
-
-            real_value.sort(key=lambda x: x[0])
-            description = ' '.join(map(lambda x: x[2], real_value))
-
-            # Update name node
-            self.nodes[root].name = new_name
-
-            for v in real_value:
-                node_id = v[1]
-                tokens = self.nodes[node_id].tokens
-                self.nodes[root].tokens.extend(tokens)
-
-                # remove :op nodes
-                del self.nodes[node_id]
-                del self.edges[node_id]
-
-                edge = filter(lambda x: x.node_id == node_id, self.edges[root])[0]
-                self.edges[root].remove(edge)
-
-            self.nodes[root].tokens = sorted(list(set(self.nodes[root].tokens)))
-            self.nodes[root].status = '+'
-
-            real_values.append({'tag':new_name, 'edge': ':name', 'constant':description, 'wiki':wiki})
-        return real_values
-
     # Old version. Introduced in EMNLP 2017 submission
     def delexicalize_name(self, root, real_values):
         parent = self.nodes[root].parent
@@ -276,7 +186,6 @@ class AMR(object):
         wiki = self.nodes[parent['node']].wiki
         i = 1
         if wiki != '-':
-            # new_name = 'wiki~' + wiki + '_' + str(i)
             new_name = '__name' + str(i) + '__'
             while len(filter(lambda x: x['tag'] == new_name, real_values)) > 0:
                 i = i + 1

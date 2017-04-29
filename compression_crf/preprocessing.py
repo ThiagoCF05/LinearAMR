@@ -19,9 +19,9 @@ READ_TRAIN_FILE = '../data/LDC2016E25/data/alignments/split/training'
 READ_DEV_FILE = '../data/LDC2016E25/data/alignments/split/dev'
 READ_TEST_FILE = '../data/LDC2016E25/data/alignments/split/test'
 
-WRITE_TRAIN_FILE = 'data_delex/train.feat'
-WRITE_DEV_FILE = 'data_delex/dev.feat'
-WRITE_TEST_FILE = 'data_delex/test.feat'
+WRITE_TRAIN_FILE = 'data_lex/train.feat'
+WRITE_DEV_FILE = 'data_lex/dev.feat'
+WRITE_TEST_FILE = 'data_lex/test.feat'
 
 class CRFPrepare(object):
     def run(self, ftrain, fdev, ftest, wtrain, wdev, wtest, delexicalized):
@@ -118,4 +118,4 @@ class CRFPrepare(object):
 if __name__ == '__main__':
     prep = CRFPrepare()
     prep.run(READ_TRAIN_FILE, READ_DEV_FILE, READ_TEST_FILE,
-             WRITE_TRAIN_FILE, WRITE_DEV_FILE, WRITE_TEST_FILE, delexicalized=True)
+             WRITE_TRAIN_FILE, WRITE_DEV_FILE, WRITE_TEST_FILE, delexicalized=False)
