@@ -32,12 +32,12 @@ def write(plot, fname):
 if __name__ == '__main__':
     model = kenlm.Model(KENLM_PATH)
 
-    hyps = read(ORIGINAL_DIR)
-    refs = read(mDelex_compress_preorder)
+    refs = read(ORIGINAL_DIR)
+    hyps = read(mDelex_compress_preorder)
 
     result = []
     for i, e in enumerate(hyps):
-        if len(hyps[i]) <= 100:
+        if len(refs[i]) <= 100:
             print i
             try:
                 ter = pyter.ter(hyps[i], refs[i])
