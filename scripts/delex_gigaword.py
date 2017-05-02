@@ -1,3 +1,11 @@
+__author__ = 'thiagocastroferreira'
+
+"""
+Author: Thiago Castro Ferreira
+Date: 02/05/2017
+Description:
+    This script aims to prepare the Gigaword corpus to train a delexicalized language model with KenLM
+"""
 
 import sys
 sys.path.append('/home/tcastrof/workspace/stanford_corenlp_pywrapper')

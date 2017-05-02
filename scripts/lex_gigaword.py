@@ -1,3 +1,12 @@
+__author__ = 'thiagocastroferreira'
+
+"""
+Author: Thiago Castro Ferreira
+Date: 02/05/2017
+Description:
+    This script aims to prepare the Gigaword corpus to train a lexicalized language model with KenLM
+"""
+
 import os
 import gzip
 import re
