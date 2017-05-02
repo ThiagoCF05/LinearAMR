@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08d4032c-5b24-4720-9e7f-2d04483e8fd2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/delex_gigaword.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/lex_gigaword.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/prepare_alignment.py" afterPath="$PROJECT_DIR$/scripts/prepare_alignment.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/prepare_parallelV2.py" afterPath="$PROJECT_DIR$/scripts/prepare_parallelV2.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/wikification.py" afterPath="$PROJECT_DIR$/scripts/wikification.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/error_analysis/predictions.txt" afterPath="$PROJECT_DIR$/error_analysis/predictions.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/error_analysis/real.txt" afterPath="$PROJECT_DIR$/error_analysis/real.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/error_analysis/size.py" afterPath="$PROJECT_DIR$/error_analysis/size.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/delex_gigaword.py" afterPath="$PROJECT_DIR$/scripts/delex_gigaword.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +22,8 @@
       <file leaf-file-name="size.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/error_analysis/size.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="103" column="17" lean-forward="false" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
+            <state relative-caret-position="435">
+              <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
               <folding>
                 <element signature="e#37#49#0" expanded="true" />
               </folding>
@@ -42,8 +34,8 @@
       <file leaf-file-name="delex_gigaword.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/delex_gigaword.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="20" lean-forward="true" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
+            <state relative-caret-position="120">
+              <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -143,6 +135,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LinearAMR" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LinearAMR" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="compression_crf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -985,13 +991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/compression_crf/preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="13" column="12" lean-forward="true" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/error_analysis/lm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
@@ -1022,16 +1021,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="28" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="199" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/error_analysis/size.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="103" column="17" lean-forward="false" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
-          <folding>
-            <element signature="e#37#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1071,10 +1060,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/compression_crf/preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="11" column="22" lean-forward="true" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error_analysis/size.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="21" lean-forward="true" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding>
+            <element signature="e#37#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/delex_gigaword.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="20" lean-forward="true" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
+        <state relative-caret-position="120">
+          <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="34" />
           <folding />
         </state>
       </provider>

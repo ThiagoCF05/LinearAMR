@@ -1,6 +1,6 @@
 
 import sys
-sys.path.append('home/tcastrof/workspace/stanford_corenlp_pywrapper')
+sys.path.append('/home/tcastrof/workspace/stanford_corenlp_pywrapper')
 from stanford_corenlp_pywrapper import CoreNLP
 
 class Delexicalizer(object):
