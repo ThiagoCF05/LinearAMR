@@ -32,7 +32,7 @@ def _unite(split_gigaword, wgigaword):
     f = open(wgigaword, 'w')
     for fname in os.listdir(split_gigaword):
         if 'gigaword.tok.delex' in fname:
-            g = open(os.path.join(split_gigaword, fname), 'w')
+            g = open(os.path.join(split_gigaword, fname))
             doc = g.read()
             g.close()
 
