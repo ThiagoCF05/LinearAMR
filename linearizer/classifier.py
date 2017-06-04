@@ -1,4 +1,5 @@
 
+import argparse
 import cPickle as p
 import operator
 import os
@@ -253,8 +254,16 @@ class Classifier(object):
         return order_id
 
 if __name__ == '__main__':
-    train = '../data/LDC2016E25/data/alignments/split/training'
-    dev = '../data/LDC2016E25/data/alignments/split/dev'
-    test = '../data/LDC2016E25/data/alignments/split/test'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('train', type=str, default='../data/LDC2016E25/data/alignments/split/training', help='train file')
+    parser.add_argument('dev', type=str, default='../data/LDC2016E25/data/alignments/split/dev', help='dev file')
+    parser.add_argument('test', type=str, default='../data/LDC2016E25/data/alignments/split/test', help='test file')
+    parser.add_argument("--delex", action="store_true", help="delexicalized")
+    args = parser.parse_args()
 
-    prep = ClassifierTraining(train, dev, test, delexicalized=True)
+    train = args.train
+    dev = args.dev
+    test = args.test
+    delex = args.delex
+
+    prep = ClassifierTraining(train, dev, test, delexicalized=delex)

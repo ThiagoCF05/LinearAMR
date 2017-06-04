@@ -1,8 +1,5 @@
+import argparse
 import cPickle as p
-
-VALUES_FILE = 'data/final_evaluation/+Delex+Compress+Preorder/realization/test.cPickle'
-TEXT_FILE = 'data/final_evaluation/nmtout/nmt+Delex+Compress+Preorder.out'
-REALIZATION_FILE = 'data/final_evaluation/nmtout/nmt+Delex+Compress+Preorder.lex_out'
 
 class Realization(object):
     def __init__(self, text, references):
@@ -78,6 +75,16 @@ class Realization(object):
         return ' '.join(self.text)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('references', type=str, default='data/delex_lm/+Delex+Compress+Preorder/realization/test.cPickle', help='references file')
+    parser.add_argument('text', type=str, default='data/delex_lm/+Delex+Compress+Preorder/test.out', help='delexicalized text file')
+    parser.add_argument('realization', type=str, default='data/delex_lm/+Delex+Compress+Preorder/test.lex_out', help='writing realized text file')
+    args = parser.parse_args()
+
+    VALUES_FILE = args.references
+    TEXT_FILE = args.text
+    REALIZATION_FILE = args.realization
+
     references = p.load(open(VALUES_FILE))
 
     f = open(TEXT_FILE)

@@ -7,6 +7,7 @@ Description:
     This script aims to prepare data to be trained by CRFSuite to perform a compression of an AMR.
 """
 
+import argparse
 import os
 import sys
 sys.path.append('../')
@@ -14,14 +15,6 @@ sys.path.append('../')
 import utils
 
 from ERG import AMR
-
-READ_TRAIN_FILE = '../data/LDC2016E25/data/alignments/split/training'
-READ_DEV_FILE = '../data/LDC2016E25/data/alignments/split/dev'
-READ_TEST_FILE = '../data/LDC2016E25/data/alignments/split/test'
-
-WRITE_TRAIN_FILE = 'data_lex/train.feat'
-WRITE_DEV_FILE = 'data_lex/dev.feat'
-WRITE_TEST_FILE = 'data_lex/test.feat'
 
 class CRFPrepare(object):
     def run(self, ftrain, fdev, ftest, wtrain, wdev, wtest, delexicalized):
@@ -116,6 +109,27 @@ class CRFPrepare(object):
         f.close()
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('read_train', type=str, default='../data/LDC2016E25/data/alignments/split/training', help='read train file')
+    parser.add_argument('read_dev', type=str, default='../data/LDC2016E25/data/alignments/split/dev', help='read dev file')
+    parser.add_argument('read_test', type=str, default='../data/LDC2016E25/data/alignments/split/test', help='read test file')
+    parser.add_argument('write_train', type=str, default='data_lex/train.feat', help='write train file')
+    parser.add_argument('write_dev', type=str, default='data_lex/dev.feat', help='write dev file')
+    parser.add_argument('write_test', type=str, default='data_lex/test.feat', help='write test file')
+    parser.add_argument("--delex", action="store_true", help="delexicalized")
+    args = parser.parse_args()
+
+    READ_TRAIN_FILE = args.read_train
+    READ_DEV_FILE = args.read_dev
+    READ_TEST_FILE = args.read_test
+
+    WRITE_TRAIN_FILE = args.write_train
+    WRITE_DEV_FILE = args.write_dev
+    WRITE_TEST_FILE = args.write_test
+
+    DELEX = args.delex
+
     prep = CRFPrepare()
     prep.run(READ_TRAIN_FILE, READ_DEV_FILE, READ_TEST_FILE,
-             WRITE_TRAIN_FILE, WRITE_DEV_FILE, WRITE_TEST_FILE, delexicalized=False)
+             WRITE_TRAIN_FILE, WRITE_DEV_FILE, WRITE_TEST_FILE,
+             delexicalized=DELEX)

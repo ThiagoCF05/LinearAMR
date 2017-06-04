@@ -19,7 +19,7 @@ location = [u'China', u'Iran', u'Russia', u'Japan', u'India', u'Pakistan',
             u'Egypt', u'Estonia', u'Indonesia', u'Laos', u'Canada', u'London',
             u'Jordan', u'Syria', u'Brazil']
 
-wiki_info = json.load(open('/Users/thiagocastroferreira/Documents/Doutorado/3 - Third_Chapter/LinearAMR/data/wiki/wiki_info.json'))
+wiki_info = json.load(open('/Users/thiagocastroferreira/Documents/Doutorado/Third_Chapter/LinearAMR/data/wiki/wiki_info.json'))
 
 def parse_aligned_corpus(fname):
     with open(fname) as f:

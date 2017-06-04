@@ -7,6 +7,7 @@ Description:
     Main script of the project. It aims to prepare the data for training and decoding of MT models
 """
 
+import argparse
 import cPickle as p
 import utils
 import operator
@@ -15,53 +16,12 @@ import os
 import numpy as np
 
 from ERG import AMR
-from compression_tree.compressor import Compressor
 from compression_crf.crfcompressor import CRFCompressor
-from linearizer.majority import Majority
 from linearizer.classifier import Classifier
 from linearizer.sort_classifier import SortClassifier
 
-TRAINING_DIR = 'data/LDC2016E25/data/alignments/split/training'
-DE_FILE = 'data/evaluation/-Delex+Compress+Sort/train.de'
-EN_FILE = 'data/evaluation/-Delex+Compress+Sort/train.en'
-DE_EN_FILE = 'data/evaluation/-Delex+Compress+Sort/model/aligned.grow-diag-final'
-LEX_FILE = 'data/evaluation/-Delex+Compress+Sort/train.lex'
-VALUES_FILE = 'data/evaluation/-Delex+Compress+Sort/realization/train.cPickle'
-
-# CRF COMPRESSOR
-CRF_COMPRESSOR_FILE = 'compression_crf/data_lex/train.out'
-
-# MAXIMUM ENTROPY CLASSIFIER COMPRESSOR DATA
-CLF_NODE_PATH = 'compression_tree/training/results/clf_node.cPickle'
-CLF_EDGE_PATH = 'compression_tree/training/results/clf_edge.cPickle'
-EDGE_PATH = 'compression_tree/training/validation/edge_feat.cPickle'
-EDGE_PARENT_PATH = 'compression_tree/training/validation/edge_parent_feat.cPickle'
-EDGE_CHILD_PATH = 'compression_tree/training/validation/edge_child_feat.cPickle'
-NODE_PATH = 'compression_tree/training/validation/node_feat.cPickle'
-NODE_PARENT_PATH = 'compression_tree/training/validation/node_parent_feat.cPickle'
-
-# STOP WORDS
-STOP_WORDS_PATH = 'data/AMR_stopwords.txt'
-
-# LINEARIZATION: gold - dfs - maj - clf - sort / COMPRESSION: gold - classifier - all - crf - crfstop
-DATA_TYPE = 'clfsort_crf'
-
-# MAJORITY LINEARIZATION
-MAJORITY_MODEL_PATH = 'linearizer/lm/majority.json'
-MAJORITY_DELEX_MODEL_PATH = 'linearizer/lm/majority_delex.json'
-
-# CLASSIFIER LINEARIZATION
-ONE_STEP_MODEL = 'linearizer/sort_lex/clf_one_step.cPickle'
-TWO_STEP_MODEL = 'linearizer/sort_lex/clf_sort_step.cPickle'
-
-# Save alignments or not
-SAVE_ALIGNMENTS = True
-
-# Delexicalized sentences or not
-IS_DELEXICALIZED = False
-
 class Parser(object):
-    def __init__(self, amr, snt, data_type, compressor, linearizer, is_delexicalized):
+    def __init__(self, amr, snt, compressor, linearizer, is_delexicalized, is_compressed, is_linearized):
         self.en = snt.split()
         self.lex = snt.split()
         self.de_en = []
@@ -69,6 +29,8 @@ class Parser(object):
         self.matrix = []
         self.real_values = []
         self.is_delexicalized = is_delexicalized
+        self.is_compressed = is_compressed
+        self.is_linearized = is_linearized
 
         self.amr = amr
 
@@ -79,21 +41,14 @@ class Parser(object):
             self.remove_delexicalized_repetitions()
 
         # COMPRESSION
-        self.order_type, self.compress_type  = data_type.split('_')
-        if self.compress_type == 'tree':
-            self.amr = compressor.compress(self.amr)
-        elif self.compress_type == 'all':
-            self.amr.include_all()
-        elif self.compress_type == 'crf':
-            f = open(STOP_WORDS_PATH)
-
+        if is_compressed:
             compressor, index = compressor
             self.amr = compressor.process(self.amr, index)
+        else:
+            self.amr.include_all()
 
         # LINEARIZATION
-        if self.order_type == 'maj' and linearizer != None:
-            self.amr.order_by_majority(linearizer)
-        if (self.order_type in ['clf', 'clfsort']) and linearizer != None:
+        if self.is_linearized:
             self.amr = linearizer.process(self.amr)
         else:
             self.amr.order(self.amr.root, 0)
@@ -344,29 +299,52 @@ class Parser(object):
         self.giza_de = null + self.giza_de
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('training_dir', type=str, default='data/LDC2016E25/data/alignments/split/training', help='training path')
+    parser.add_argument('de', type=str, default='data/evaluation/-Delex+Compress+Sort/train.de', help='source file')
+    parser.add_argument('en', type=str, default='data/evaluation/-Delex+Compress+Sort/train.en', help='target file')
+    parser.add_argument('de_en', type=str, default='data/evaluation/-Delex+Compress+Sort/model/aligned.grow-diag-final', help='alignment file')
+    parser.add_argument('--lex', type=str, default='data/evaluation/-Delex+Compress+Sort/train.lex', help='lexicalized file')
+    parser.add_argument('--references', type=str, default='data/evaluation/-Delex+Compress+Sort/realization/train.cPickle', help='references writing file')
+    parser.add_argument('--crf_compressor', type=str, default='compression_crf/data_lex/train.out', help='trained crf compressor path')
+    parser.add_argument('--one_step', type=str, default='linearizer/sort_lex/clf_one_step.cPickle', help='trained one step model')
+    parser.add_argument('--two_step', type=str, default='linearizer/sort_lex/clf_sort_step.cPickle', help='trained two step model')
+    parser.add_argument("--delex", action="store_true", help="delexicalization")
+    parser.add_argument("--linearizarion", action="store_true", help="linearization")
+    parser.add_argument("--compression", action="store_true", help="compression")
+    parser.add_argument("--save_alignments", action="store_true", help="save alignments")
+    args = parser.parse_args()
+
+    TRAINING_DIR = args.training_dir
+    DE_FILE = args.de
+    EN_FILE = args.en
+    DE_EN_FILE = args.de_en
+    LEX_FILE = args.lex
+    VALUES_FILE = args.references
+
+    # Delexicalized sentences or not
+    IS_DELEXICALIZED = args.delex
+
+    IS_COMPRESSED = args.compression
+
+    # CRF COMPRESSOR
+    CRF_COMPRESSOR_FILE = args.crf_compressor
+
+    IS_LINEARIZED = args.linearization
+
+    # CLASSIFIER LINEARIZATION
+    ONE_STEP_MODEL = args.one_step
+    TWO_STEP_MODEL = args.two_step
+
+    # Save alignments or not
+    SAVE_ALIGNMENTS = True
+
     dir = TRAINING_DIR
     dirs = os.listdir(dir)
 
-    if 'crfstop' in DATA_TYPE:
-        stopwords = utils.get_stopwords(STOP_WORDS_PATH)
-        crfcompressor = CRFCompressor(fresults=CRF_COMPRESSOR_FILE, stopwords=stopwords)
-    else:
-        crfcompressor = CRFCompressor(fresults=CRF_COMPRESSOR_FILE, stopwords=[])
+    crfcompressor = CRFCompressor(fresults=CRF_COMPRESSOR_FILE, stopwords=[])
 
-    compressor = Compressor(clf_node_path=CLF_NODE_PATH,
-                            clf_edge_path=CLF_EDGE_PATH,
-                            edge_path=EDGE_PATH,
-                            edge_parent_path=EDGE_PARENT_PATH,
-                            edge_child_path=EDGE_CHILD_PATH,
-                            node_path=NODE_PATH,
-                            node_parent_path=NODE_PARENT_PATH)
-
-    maj = Majority(model_path=MAJORITY_MODEL_PATH, delex_model_path=MAJORITY_DELEX_MODEL_PATH)
-
-    if 'clfsort' in DATA_TYPE:
-        clf = SortClassifier(clf_one_step=ONE_STEP_MODEL, clf_sort_step=TWO_STEP_MODEL)
-    else:
-        clf = Classifier(clf_one_step=ONE_STEP_MODEL, clfs_two_step=TWO_STEP_MODEL)
+    clf = Classifier(clf_one_step=ONE_STEP_MODEL, clfs_two_step=TWO_STEP_MODEL)
 
     amrs = []
     for fname in dirs:
@@ -388,18 +366,17 @@ if __name__ == '__main__':
 
     for i, amr in enumerate(amrs):
         try:
-            linearizer = maj
-            if 'clf' in DATA_TYPE:
-                linearizer = clf
+            linearizer = clf
 
             _amr = AMR(nodes={}, edges={}, root='')
             _amr.parse_aligned(amr['amr'].lower())
 
             parser = Parser(amr=_amr,
                             snt=amr['sentence'].lower(),
-                            data_type=DATA_TYPE,
                             compressor=(crfcompressor, i),
                             linearizer=linearizer,
+                            is_compressed=IS_COMPRESSED,
+                            is_linearized=IS_LINEARIZED,
                             is_delexicalized=IS_DELEXICALIZED)
 
             de.write(' '.join(parser.de).lower())
