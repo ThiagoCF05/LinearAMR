@@ -1,4 +1,6 @@
 
+import sys
+sys.path.append('../')
 import argparse
 import cPickle as p
 import operator
@@ -13,7 +15,7 @@ nltk.config_megam("/usr/local/bin/megam.opt")
 from scipy.stats import rankdata
 
 class ClassifierTraining(object):
-    def __init__(self, ftrain, fdev, ftest, delexicalized=True):
+    def __init__(self, ftrain, fdev, ftest, wdir, delexicalized=True):
         self.train_amrs, self.dev_amrs, self.test_amrs = [], [], []
         self.delexicalized = delexicalized
 
@@ -33,16 +35,16 @@ class ClassifierTraining(object):
         # test_one_step, test_two_step = self.extract_features(self.test_amrs)
 
         print 'SAVING...'
-        p.dump(self.train_one_step, open('steps_delex/train_one_step.cPickle', 'w'))
-        p.dump(self.train_two_step, open('steps_delex/train_two_step.cPickle', 'w'))
-        p.dump(self.dev_one_step, open('steps_delex/dev_one_step.cPickle', 'w'))
-        p.dump(self.dev_two_step, open('steps_delex/dev_two_step.cPickle', 'w'))
+        # p.dump(self.train_one_step, open('steps_delex/train_one_step.cPickle', 'w'))
+        # p.dump(self.train_two_step, open('steps_delex/train_two_step.cPickle', 'w'))
+        # p.dump(self.dev_one_step, open('steps_delex/dev_one_step.cPickle', 'w'))
+        # p.dump(self.dev_two_step, open('steps_delex/dev_two_step.cPickle', 'w'))
 
         print 'TRAINING...'
         self.train()
 
-        p.dump(self.clf_one_step, open('steps_delex/clf_one_step.cPickle', 'w'))
-        p.dump(self.clfs_two_step, open('steps_delex/clf_two_step.cPickle', 'w'))
+        p.dump(self.clf_one_step, open(os.path.join(wdir, 'clf_one_step.cPickle'), 'w'))
+        p.dump(self.clfs_two_step, open(os.path.join(wdir, 'clf_two_step.cPickle'), 'w'))
 
         print 'EVALUATING...'
         self.evaluate()
@@ -71,6 +73,7 @@ class ClassifierTraining(object):
         return amrs
 
     def process(self, amr, root, tokens):
+        parent = amr.nodes[root].parent
         head = amr.nodes[root].name
         head_tokens = amr.nodes[root].tokens
         tokens.extend(head_tokens)
@@ -85,7 +88,7 @@ class ClassifierTraining(object):
 
             tokens.extend(child_tokens)
 
-            feature = {'head':head, 'edge':edge.name, 'child':child, 'order_id':order_id}
+            feature = {'parent':parent['node'], 'edge_parent':parent['edge'], 'head':head, 'edge':edge.name, 'child':child, 'order_id':order_id}
             if len(child_tokens) > 0:
                 feature['token'] = min(child_tokens)
 
@@ -99,9 +102,9 @@ class ClassifierTraining(object):
 
         # treat group before the head
         before.sort(key=operator.itemgetter('order_id'))
-        features_two_step = {'head':head}
+        features_two_step = {'head':head, 'parent':parent['node'], 'edge_parent':parent['edge']}
         for i, elem in enumerate(before):
-            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child']}
+            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
             self.one_step.append((simple_feature, 'before'))
 
             key = 'edge_' + str(i+1)
@@ -123,9 +126,9 @@ class ClassifierTraining(object):
 
         # treat group after the head
         after.sort(key=operator.itemgetter('order_id'))
-        features_two_step = {'head':head}
+        features_two_step = {'head':head, 'parent':parent['node'], 'edge_parent':parent['edge']}
         for i, elem in enumerate(after):
-            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child']}
+            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
             self.one_step.append((simple_feature, 'after'))
 
             key = 'edge_' + str(i+1)
@@ -258,6 +261,7 @@ if __name__ == '__main__':
     parser.add_argument('train', type=str, default='../data/LDC2016E25/data/alignments/split/training', help='train file')
     parser.add_argument('dev', type=str, default='../data/LDC2016E25/data/alignments/split/dev', help='dev file')
     parser.add_argument('test', type=str, default='../data/LDC2016E25/data/alignments/split/test', help='test file')
+    parser.add_argument('wdir', type=str, default='data_lex', help='writing directory')
     parser.add_argument("--delex", action="store_true", help="delexicalized")
     args = parser.parse_args()
 
@@ -265,5 +269,12 @@ if __name__ == '__main__':
     dev = args.dev
     test = args.test
     delex = args.delex
+    wdir = args.wdir
 
-    prep = ClassifierTraining(train, dev, test, delexicalized=delex)
+    # train = '../data/LDC2016E25/data/alignments/split/training'
+    # dev = '../data/LDC2016E25/data/alignments/split/dev'
+    # test = '../data/LDC2016E25/data/alignments/split/test'
+    # delex = False
+    # wdir = 'aaa'
+
+    prep = ClassifierTraining(train, dev, test, wdir, delexicalized=delex)
