@@ -226,25 +226,25 @@ class Parser(object):
             self.real_values.append({'tag':new_name, 'edge': ':name', 'constant':description, 'wiki':wiki, 'name': text_name})
 
     def linearize(self):
-        if self.order_type == 'gold':
-            linear = []
-            for elem in self.de_en:
-                name, tokens, order_id = elem
-                for token in tokens:
-                    if (name, token, order_id) not in linear:
-                        linear.append((name, token, order_id))
-                        break
-
-            linear.sort(key=operator.itemgetter(1, 2))
-            de_en = []
-            for l in linear:
-                tokens = filter(lambda x: x[0] == l[0] and l[1] in x[1] and l[2] == x[2], self.de_en)[0][1]
-                de_en.append((l[0], tokens, l[2]))
-
-            self.de_en = de_en
-        else:
-            self.de_en.sort(key=operator.itemgetter(2))
-            linear = self.de_en
+        # if self.order_type == 'gold':
+        #     linear = []
+        #     for elem in self.de_en:
+        #         name, tokens, order_id = elem
+        #         for token in tokens:
+        #             if (name, token, order_id) not in linear:
+        #                 linear.append((name, token, order_id))
+        #                 break
+        #
+        #     linear.sort(key=operator.itemgetter(1, 2))
+        #     de_en = []
+        #     for l in linear:
+        #         tokens = filter(lambda x: x[0] == l[0] and l[1] in x[1] and l[2] == x[2], self.de_en)[0][1]
+        #         de_en.append((l[0], tokens, l[2]))
+        #
+        #     self.de_en = de_en
+        # else:
+        self.de_en.sort(key=operator.itemgetter(2))
+        linear = self.de_en
 
         self.de = map(lambda x: x[0], linear)
 
@@ -310,7 +310,7 @@ if __name__ == '__main__':
     parser.add_argument('--one_step', type=str, default='linearizer/sort_lex/clf_one_step.cPickle', help='trained one step model')
     parser.add_argument('--two_step', type=str, default='linearizer/sort_lex/clf_sort_step.cPickle', help='trained two step model')
     parser.add_argument("--delex", action="store_true", help="delexicalization")
-    parser.add_argument("--linearizarion", action="store_true", help="linearization")
+    parser.add_argument("--linearization", action="store_true", help="linearization")
     parser.add_argument("--compression", action="store_true", help="compression")
     parser.add_argument("--save_alignments", action="store_true", help="save alignments")
     args = parser.parse_args()
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     TWO_STEP_MODEL = args.two_step
 
     # Save alignments or not
-    SAVE_ALIGNMENTS = True
+    SAVE_ALIGNMENTS = args.save_alignments
 
     dir = TRAINING_DIR
     dirs = os.listdir(dir)
