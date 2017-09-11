@@ -2,7 +2,7 @@
 # Author: Thiago Castro Ferreira
 # Date: 23/03/2017
 # Description:
-#    This script aims to train, tunne and run a PBMT model based on a preprocessed parallel data
+#    This script aims to train, tune and run a PBMT model based on a preprocessed parallel data
 ####################################################################################################
 
 mosesdecoder=/home/tcastrof/workspace/mosesdecoder
