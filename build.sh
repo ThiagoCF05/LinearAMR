@@ -1,3 +1,14 @@
+####################################################################################################
+# Author: Thiago Castro Ferreira
+# Date: 23/03/2017
+# Requirements:
+#    - CRFSuite (http://www.chokkan.org/software/crfsuite/)
+#    - NLTK with Megam (http://www.nltk.org/)
+# Description:
+#    This script aims to train the models for compression and preordering both for lexicalised as
+#    delexicalised data
+####################################################################################################
+
 corpus=/Users/thiagocastroferreira/Documents/Doutorado/Third_Chapter/AMR/Corpora/LDC2015E86/data/alignments/split
 path_lex=/Users/thiagocastroferreira/Documents/Doutorado/Third_Chapter/AMR/Corpora/LDC2015E86/evaluation/lex
 path_delex=/Users/thiagocastroferreira/Documents/Doutorado/Third_Chapter/AMR/Corpora/LDC2015E86/evaluation/delex
