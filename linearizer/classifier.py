@@ -1,4 +1,13 @@
+__author__ = 'thiagocastroferreira'
 
+"""
+Author: Thiago Castro Ferreira
+Date: 03/2017
+Description:
+    Preordering classifier in te linearisation step
+    Training: ClassifierTraining
+    Prediction: Classifier
+"""
 import sys
 sys.path.append('../')
 import argparse
@@ -34,15 +43,10 @@ class ClassifierTraining(object):
         self.dev_one_step, self.dev_two_step = self.extract_features(self.dev_amrs)
         # test_one_step, test_two_step = self.extract_features(self.test_amrs)
 
-        print 'SAVING...'
-        # p.dump(self.train_one_step, open('steps_delex/train_one_step.cPickle', 'w'))
-        # p.dump(self.train_two_step, open('steps_delex/train_two_step.cPickle', 'w'))
-        # p.dump(self.dev_one_step, open('steps_delex/dev_one_step.cPickle', 'w'))
-        # p.dump(self.dev_two_step, open('steps_delex/dev_two_step.cPickle', 'w'))
-
         print 'TRAINING...'
         self.train()
 
+        print 'SAVING...'
         p.dump(self.clf_one_step, open(os.path.join(wdir, 'clf_one_step.cPickle'), 'w'))
         p.dump(self.clfs_two_step, open(os.path.join(wdir, 'clf_two_step.cPickle'), 'w'))
 
@@ -104,7 +108,8 @@ class ClassifierTraining(object):
         before.sort(key=operator.itemgetter('order_id'))
         features_two_step = {'head':head, 'parent':parent['node'], 'edge_parent':parent['edge']}
         for i, elem in enumerate(before):
-            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
+            # simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
+            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child']}
             self.one_step.append((simple_feature, 'before'))
 
             key = 'edge_' + str(i+1)
@@ -128,7 +133,8 @@ class ClassifierTraining(object):
         after.sort(key=operator.itemgetter('order_id'))
         features_two_step = {'head':head, 'parent':parent['node'], 'edge_parent':parent['edge']}
         for i, elem in enumerate(after):
-            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
+            # simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child'], 'parent':elem['parent'], 'edge_parent':elem['edge_parent']}
+            simple_feature = {'head':elem['head'], 'edge':elem['edge'], 'child':elem['child']}
             self.one_step.append((simple_feature, 'after'))
 
             key = 'edge_' + str(i+1)
@@ -270,11 +276,5 @@ if __name__ == '__main__':
     test = args.test
     delex = args.delex
     wdir = args.wdir
-
-    # train = '../data/LDC2016E25/data/alignments/split/training'
-    # dev = '../data/LDC2016E25/data/alignments/split/dev'
-    # test = '../data/LDC2016E25/data/alignments/split/test'
-    # delex = False
-    # wdir = 'aaa'
 
     prep = ClassifierTraining(train, dev, test, wdir, delexicalized=delex)

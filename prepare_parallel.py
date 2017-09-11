@@ -18,7 +18,6 @@ import numpy as np
 from ERG import AMR
 from compression_crf.crfcompressor import CRFCompressor
 from linearizer.classifier import Classifier
-from linearizer.sort_classifier import SortClassifier
 
 class Parser(object):
     def __init__(self, amr, snt, compressor, linearizer, is_delexicalized, is_compressed, is_linearized):
@@ -226,23 +225,6 @@ class Parser(object):
             self.real_values.append({'tag':new_name, 'edge': ':name', 'constant':description, 'wiki':wiki, 'name': text_name})
 
     def linearize(self):
-        # if self.order_type == 'gold':
-        #     linear = []
-        #     for elem in self.de_en:
-        #         name, tokens, order_id = elem
-        #         for token in tokens:
-        #             if (name, token, order_id) not in linear:
-        #                 linear.append((name, token, order_id))
-        #                 break
-        #
-        #     linear.sort(key=operator.itemgetter(1, 2))
-        #     de_en = []
-        #     for l in linear:
-        #         tokens = filter(lambda x: x[0] == l[0] and l[1] in x[1] and l[2] == x[2], self.de_en)[0][1]
-        #         de_en.append((l[0], tokens, l[2]))
-        #
-        #     self.de_en = de_en
-        # else:
         self.de_en.sort(key=operator.itemgetter(2))
         linear = self.de_en
 
@@ -262,41 +244,6 @@ class Parser(object):
 
         self.de_en = sorted(de_en, key=lambda x:x[1])
         self.de_en = ' '.join(map(lambda x: str(x[0]) + '-' + str(x[1]), self.de_en))
-
-    def format_giza(self):
-        # de
-        # self.giza_de = 'NULL ({ }) '
-        self.giza_de = ''
-        for i in range(self.matrix.shape[0]):
-            self.giza_de += self.de[i] + ' ({ '
-            for j in range(self.matrix.shape[1]):
-                if self.matrix[i,j] > 0:
-                    self.giza_de += str(j+1) + ' '
-            self.giza_de += '}) '
-        self.giza_de = self.giza_de.strip()
-
-        # en
-        self.giza_en = 'NULL ({ }) '
-        # self.giza_en = ''
-        nulls = []
-        for j in range(self.matrix.shape[1]):
-            self.giza_en += self.en[j] + ' ({ '
-            isNull = True
-            for i in range(self.matrix.shape[0]):
-                if self.matrix[i,j] > 0:
-                    self.giza_en += str(i+1) + ' '
-                    isNull = False
-            if isNull:
-                nulls.append(j)
-            self.giza_en += '}) '
-        self.giza_en = self.giza_en.strip()
-
-        # null
-        null = 'NULL ({ '
-        for n in nulls:
-            null += str(n+1) + ' '
-        null += '}) '
-        self.giza_de = null + self.giza_de
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
