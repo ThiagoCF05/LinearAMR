@@ -29,3 +29,6 @@ Run this script to train, tune and translate using the Phrase-Based Machine Tran
 Look that [Moses](http://www.statmt.org/moses/), [MGiza](https://github.com/moses-smt/mgiza) and a [5-gram KenLM language model](https://github.com/kpu/kenlm) are required to execute this step.
 
 ## realisation.sh
+Run this script to realise the references of the delexicalised outputs. Before run the script, ipdate the following variables:
+
+1. data: path for the experiment
